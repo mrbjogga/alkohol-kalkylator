@@ -14,9 +14,6 @@
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #f2f4f7;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
       padding: 20px;
     }
@@ -24,7 +21,8 @@
     .app {
       background: white;
       width: 100%;
-      max-width: 420px;
+      max-width: 520px;
+      margin: 20px auto;
       padding: 28px;
       border-radius: 22px;
       box-shadow: 0 8px 30px rgba(0,0,0,0.10);
@@ -39,19 +37,32 @@
     .subtitle {
       text-align: center;
       color: #666;
-      margin-bottom: 28px;
+      margin-bottom: 25px;
+    }
+
+    .alternativ {
+      padding: 20px;
+      margin-bottom: 20px;
+      background: #f7f8fa;
+      border-radius: 16px;
+    }
+
+    .alternativ h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 21px;
     }
 
     label {
       display: block;
       font-weight: 600;
-      margin-top: 18px;
+      margin-top: 14px;
       margin-bottom: 7px;
     }
 
     input {
       width: 100%;
-      padding: 15px;
+      padding: 14px;
       font-size: 20px;
       border: 1px solid #ccc;
       border-radius: 12px;
@@ -63,86 +74,215 @@
     }
 
     .resultat {
-      margin-top: 28px;
-      padding: 22px;
+      margin-top: 17px;
+      padding: 15px;
       background: #f0f6ff;
-      border-radius: 16px;
+      border-radius: 12px;
       text-align: center;
     }
 
     .resultat-text {
-      font-size: 16px;
+      font-size: 14px;
       color: #555;
-      margin-bottom: 6px;
     }
 
-    #resultat {
-      font-size: 34px;
+    .resultat-siffra {
+      font-size: 28px;
       font-weight: 700;
+      margin-top: 3px;
+    }
+
+    .jamforelse {
+      margin-top: 25px;
+      padding: 22px;
+      background: #eaf7ee;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .jamforelse h2 {
+      margin: 0 0 8px 0;
+      font-size: 19px;
+    }
+
+    #skillnad {
+      font-size: 25px;
+      font-weight: 700;
+    }
+
+    #forklaring {
+      margin-top: 7px;
+      color: #555;
+      font-size: 15px;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="app">
-    <h1>Alkoholkalkylator</h1>
+<div class="app">
 
-    <div class="subtitle">
-      Beräkna mängden ren alkohol
-    </div>
+  <h1>Alkoholkalkylator</h1>
 
-    <label for="mangd">Mängd dryck (ml)</label>
-    <input
-      type="text"
-      inputmode="decimal"
-      id="mangd"
-      placeholder="t.ex. 500"
-    >
+  <div class="subtitle">
+    Jämför mängden ren alkohol
+  </div>
 
-    <label for="procent">Alkoholhalt (%)</label>
-    <input
-      type="text"
-      inputmode="decimal"
-      id="procent"
-      placeholder="t.ex. 5,2"
-    >
+  <div class="alternativ">
+
+    <h2>Alternativ 1</h2>
+
+    <label for="mangd1">Mängd dryck (ml)</label>
+    <input type="text" inputmode="decimal"
+           id="mangd1" placeholder="t.ex. 500">
+
+    <label for="procent1">Alkoholhalt (%)</label>
+    <input type="text" inputmode="decimal"
+           id="procent1" placeholder="t.ex. 5,2">
 
     <div class="resultat">
       <div class="resultat-text">Ren alkohol</div>
-      <div id="resultat">0 ml</div>
+      <div class="resultat-siffra" id="resultat1">0 ml</div>
     </div>
+
   </div>
 
-  <script>
-    const mangd = document.getElementById("mangd");
-    const procent = document.getElementById("procent");
-    const resultat = document.getElementById("resultat");
 
-    function hamtaTal(varde) {
-      return parseFloat(varde.replace(",", "."));
+  <div class="alternativ">
+
+    <h2>Alternativ 2</h2>
+
+    <label for="mangd2">Mängd dryck (ml)</label>
+    <input type="text" inputmode="decimal"
+           id="mangd2" placeholder="t.ex. 150">
+
+    <label for="procent2">Alkoholhalt (%)</label>
+    <input type="text" inputmode="decimal"
+           id="procent2" placeholder="t.ex. 12">
+
+    <div class="resultat">
+      <div class="resultat-text">Ren alkohol</div>
+      <div class="resultat-siffra" id="resultat2">0 ml</div>
+    </div>
+
+  </div>
+
+
+  <div class="jamforelse">
+
+    <h2>Skillnad</h2>
+
+    <div id="skillnad">0 ml</div>
+
+    <div id="forklaring">
+      Fyll i båda alternativen
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  function hamtaTal(varde) {
+    return parseFloat(varde.replace(",", "."));
+  }
+
+  function berakna() {
+
+    const mangd1 = hamtaTal(document.getElementById("mangd1").value);
+    const procent1 = hamtaTal(document.getElementById("procent1").value);
+
+    const mangd2 = hamtaTal(document.getElementById("mangd2").value);
+    const procent2 = hamtaTal(document.getElementById("procent2").value);
+
+    let alkohol1 = NaN;
+    let alkohol2 = NaN;
+
+
+    if (!isNaN(mangd1) && !isNaN(procent1)) {
+
+      alkohol1 = mangd1 * procent1 / 100;
+
+      document.getElementById("resultat1").textContent =
+        formatTal(alkohol1) + " ml";
+
+    } else {
+
+      document.getElementById("resultat1").textContent = "0 ml";
+
     }
 
-    function berakna() {
-      const ml = hamtaTal(mangd.value);
-      const alkoholhalt = hamtaTal(procent.value);
 
-      if (isNaN(ml) || isNaN(alkoholhalt)) {
-        resultat.textContent = "0 ml";
-        return;
+    if (!isNaN(mangd2) && !isNaN(procent2)) {
+
+      alkohol2 = mangd2 * procent2 / 100;
+
+      document.getElementById("resultat2").textContent =
+        formatTal(alkohol2) + " ml";
+
+    } else {
+
+      document.getElementById("resultat2").textContent = "0 ml";
+
+    }
+
+
+    if (!isNaN(alkohol1) && !isNaN(alkohol2)) {
+
+      const skillnad = Math.abs(alkohol1 - alkohol2);
+
+      document.getElementById("skillnad").textContent =
+        formatTal(skillnad) + " ml";
+
+      if (alkohol1 > alkohol2) {
+
+        document.getElementById("forklaring").textContent =
+          "Alternativ 1 innehåller " +
+          formatTal(skillnad) +
+          " ml mer alkohol";
+
+      } else if (alkohol2 > alkohol1) {
+
+        document.getElementById("forklaring").textContent =
+          "Alternativ 2 innehåller " +
+          formatTal(skillnad) +
+          " ml mer alkohol";
+
+      } else {
+
+        document.getElementById("forklaring").textContent =
+          "Alternativen innehåller lika mycket alkohol";
+
       }
 
-      const alkohol = ml * alkoholhalt / 100;
+    } else {
 
-      resultat.textContent =
-        alkohol.toLocaleString("sv-SE", {
-          maximumFractionDigits: 2
-        }) + " ml";
+      document.getElementById("skillnad").textContent = "0 ml";
+
+      document.getElementById("forklaring").textContent =
+        "Fyll i båda alternativen";
+
     }
 
-    mangd.addEventListener("input", berakna);
-    procent.addEventListener("input", berakna);
-  </script>
+  }
+
+
+  function formatTal(tal) {
+
+    return tal.toLocaleString("sv-SE", {
+      maximumFractionDigits: 2
+    });
+
+  }
+
+
+  document.querySelectorAll("input").forEach(function(input) {
+    input.addEventListener("input", berakna);
+  });
+
+</script>
 
 </body>
 </html>
